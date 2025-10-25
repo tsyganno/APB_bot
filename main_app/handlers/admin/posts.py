@@ -41,7 +41,7 @@ async def set_broadcast_media(message: Message, state: FSMContext):
 
     await state.update_data(media_file_id=media_file_id, media_type=media_type)
     data = await state.get_data()
-    preview = f"📢 <b>Предпросмотр рассылки</b>\n\n{data['message_text']}\n"
+    preview = f"📢 <b>Предпросмотр ПОСТа</b>\n\n{data['message_text']}\n"
     await message.answer(preview, parse_mode="HTML")
     await message.answer("Сохранить? (да/нет)")
     await state.set_state(PostState.confirm)
@@ -50,7 +50,7 @@ async def set_broadcast_media(message: Message, state: FSMContext):
 @post_router.message(PostState.confirm, IsAdmin())
 async def confirm_broadcast(message: Message, state: FSMContext):
     if message.text.lower() != "да":
-        await message.answer("Рассылка отменена.")
+        await message.answer("Сохранение ПОСТа отменено.")
         return await state.clear()
 
     data = await state.get_data()

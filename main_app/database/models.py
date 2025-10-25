@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, BigInteger, DateTime, Text
+from sqlalchemy import Column, String, BigInteger, DateTime, Text, Boolean
 from sqlalchemy.sql import func
 from main_app.database.session import Base
 
@@ -25,6 +25,7 @@ class Post(Base):
     media_file_id = Column(String, nullable=True)     # file_id медиа
     media_type = Column(String, nullable=True)        # photo / video / document
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    is_sent = Column(Boolean, default=False)
 
     def __repr__(self):
         return f"<Post(id={self.id}, created_at={self.created_at}, message_text={self.message_text})>"

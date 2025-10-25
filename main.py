@@ -10,6 +10,7 @@ from main_app.handlers.admin import admin, posts
 from main_app.core.bot_config import bot
 from main_app.core.logger import logger
 from main_app.services.middleware import ThrottlingMiddleware
+from main_app.services.functions import start_post_scheduler
 
 
 async def main():
@@ -25,6 +26,9 @@ async def main():
 
     # Подключаем роутеры (user)
     dp.include_router(start.start_router)
+
+    # Запускаем фоновую задачу рассылки
+    asyncio.create_task(start_post_scheduler())
 
     logger.info("Бот успешно запущен")
     try:

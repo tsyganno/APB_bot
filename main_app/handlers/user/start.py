@@ -8,7 +8,7 @@ from main_app.core.bot_config import bot
 from main_app.core.app_config import settings
 from main_app.core.logger import logger
 from main_app.keyboards.menu_panel import set_admin_commands, set_user_commands, clear_commands
-
+from main_app.services.functions import send_posts
 from main_app.keyboards.user_keyboard import USER_KB
 from main_app.database.crud import save_user_to_db
 
@@ -42,7 +42,9 @@ async def conf_privacy(callback: CallbackQuery, state: FSMContext):
         await save_user_to_db(user_data, callback.from_user.id, callback.from_user.username)
     except Exception as ex:
         logger.error(f"Неизвестная ошибка при записи пользователя в БД: {ex}")
-    await callback.message.answer("Поздравляю! Ты запустил бота и теперь можешь бесплатно забрать гайд!"
-                                  "\n\nЖелаю приятного просмотра!"
-                                  "\n\nВидео ниже.", reply_markup=USER_KB.watching_video(1))
+    # await callback.message.answer("Поздравляю! Ты запустил бота и теперь можешь бесплатно забрать гайд!"
+    #                               "\n\nЖелаю приятного просмотра!"
+    #                               "\n\nВидео ниже.", reply_markup=USER_KB.watching_video(1))
+
+    await send_posts()
 
