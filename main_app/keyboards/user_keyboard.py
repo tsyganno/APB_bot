@@ -4,4 +4,8 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMar
 class USER_KB:
     @staticmethod
     def privacy_kb():
-        return InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Да, согласен(а)", callback_data="conf_privacy")]])
+        return InlineKeyboardMarkup(
+            inline_keyboard=[[
+                InlineKeyboardButton(text="Да, согласен(а)", callback_data="conf_privacy")
+            ]]
+        )
