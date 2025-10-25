@@ -1,5 +1,11 @@
 from aiogram.fsm.state import StatesGroup, State
 
 
-class States(StatesGroup):
-    confirm_privacy = State()
+class UserState(StatesGroup):
+    admin = State()
+
+
+class PostState(StatesGroup):
+    text = State()
+    media = State()
+    confirm = State()

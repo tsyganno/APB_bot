@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     bot_token: str
     admin_id: int
     database_url: PostgresDsn
+    list_admin_id: list
 
     class Config:
         env_file = ".env"

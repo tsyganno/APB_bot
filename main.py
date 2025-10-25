@@ -6,6 +6,7 @@ from aiogram import Dispatcher
 
 
 from main_app.handlers.user import start
+from main_app.handlers.admin import admin, posts
 from main_app.core.bot_config import bot
 from main_app.core.logger import logger
 from main_app.services.middleware import ThrottlingMiddleware
@@ -19,6 +20,8 @@ async def main():
     dp.callback_query.middleware(ThrottlingMiddleware(limit=1, window=1))
 
     # Подключаем роутеры (admin)
+    dp.include_router(admin.admin_router)
+    dp.include_router(posts.post_router)
 
     # Подключаем роутеры (user)
     dp.include_router(start.start_router)

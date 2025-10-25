@@ -38,3 +38,13 @@ async def save_user_to_db(user_data: dict, telegram_id: int, username: str):
             )
 
         await session.commit()
+
+
+async def search_all_users():
+    """ Поиск всех пользователей в таблице User в БД """
+    async with async_session_maker() as session:
+        users_query = select(User)
+        users_result = await session.execute(users_query)
+        users = users_result.scalars().all()
+        if len(users) > 0:
+            return users

@@ -8,6 +8,7 @@ USER_COMMANDS = [
 
 ADMIN_COMMANDS = [
     BotCommand(command="start", description="Начать сначала"),
+    BotCommand(command="admin_panel", description="Панель администратора"),
 ]
 
 

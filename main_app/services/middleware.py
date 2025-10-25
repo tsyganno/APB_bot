@@ -2,7 +2,11 @@ import time
 
 from aiogram import BaseMiddleware
 from aiogram.types import Message, CallbackQuery
+from aiogram.filters import BaseFilter
 from typing import Callable, Dict, Any, Awaitable, Union
+
+
+from main_app.core.app_config import settings  # список ID админов
 
 
 class ThrottlingMiddleware(BaseMiddleware):
@@ -42,3 +46,8 @@ class ThrottlingMiddleware(BaseMiddleware):
         self.users_calls[user_id].append(now)
 
         return await handler(event, data)
+
+
+class IsAdmin(BaseFilter):
+    async def __call__(self, message: Message) -> bool:
+        return message.from_user.id in settings.list_admin_id

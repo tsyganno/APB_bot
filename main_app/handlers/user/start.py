@@ -8,7 +8,7 @@ from main_app.core.bot_config import bot
 from main_app.core.app_config import settings
 from main_app.core.logger import logger
 from main_app.keyboards.menu_panel import set_admin_commands, set_user_commands, clear_commands
-from main_app.keyboards.admin_keyboard import ADMIN_KB
+
 from main_app.keyboards.user_keyboard import USER_KB
 from main_app.database.crud import save_user_to_db
 
@@ -18,12 +18,9 @@ start_router = Router()
 @start_router.message(F.text == "/start")
 async def cmd_start(message: Message, state: FSMContext):
     await state.clear()
-    if message.from_user.id == settings.admin_id:  # id админа в config.py
+    if message.from_user.id in settings.list_admin_id:  # id админа в config.py
         await set_admin_commands(bot, message.from_user.id)
-        await message.answer(
-            "👋 Привет, Админ!\n\nЧто хочешь сделать?",
-            reply_markup=ADMIN_KB.admin_start_kb()
-        )
+        await message.answer("👋 Привет, Админ!\n\nНажми кнопку 'МЕНЮ' для выбора действий.")
     else:
         await clear_commands(bot, message.from_user.id)
         await message.answer("Чтобы получить «20 шагов для запуска импорта», нужно ваше согласие ниже ⬇️👇\n\n"
@@ -44,4 +41,8 @@ async def conf_privacy(callback: CallbackQuery, state: FSMContext):
     try:
         await save_user_to_db(user_data, callback.from_user.id, callback.from_user.username)
     except Exception as ex:
-        logger.error(f"Неизвестная ошибка при записи пользователя в БД: {ex}", exc_info=ex)
+        logger.error(f"Неизвестная ошибка при записи пользователя в БД: {ex}")
+    await callback.message.answer("Поздравляю! Ты запустил бота и теперь можешь бесплатно забрать гайд!"
+                                  "\n\nЖелаю приятного просмотра!"
+                                  "\n\nВидео ниже.", reply_markup=USER_KB.watching_video(1))
+
