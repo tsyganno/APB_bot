@@ -18,3 +18,7 @@ class Settings(BaseSettings):
 settings = Settings()
 
 created_at_irkutsk_tz = datetime.now(pytz.timezone("Asia/Irkutsk"))
+
+TELEGRAM_MESSAGE_LIMIT = 4096
+
+DELETE_AFTER_SECONDS = 60  # удалить через 1 час

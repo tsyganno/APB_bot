@@ -42,9 +42,5 @@ async def conf_privacy(callback: CallbackQuery, state: FSMContext):
         await save_user_to_db(user_data, callback.from_user.id, callback.from_user.username)
     except Exception as ex:
         logger.error(f"Неизвестная ошибка при записи пользователя в БД: {ex}")
-    # await callback.message.answer("Поздравляю! Ты запустил бота и теперь можешь бесплатно забрать гайд!"
-    #                               "\n\nЖелаю приятного просмотра!"
-    #                               "\n\nВидео ниже.", reply_markup=USER_KB.watching_video(1))
-
-    await send_posts()
+    await send_posts(callback.from_user.id)
 

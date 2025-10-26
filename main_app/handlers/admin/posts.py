@@ -3,7 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove, CallbackQuery
 from aiogram.exceptions import TelegramForbiddenError, TelegramBadRequest
 
-from main_app.core.app_config import created_at_irkutsk_tz
+from main_app.core.app_config import created_at_irkutsk_tz, TELEGRAM_MESSAGE_LIMIT
 from main_app.states.states import PostState, UserState
 from main_app.core.logger import logger
 from main_app.database.models import Post
@@ -17,6 +17,9 @@ post_router.message.filter(IsAdmin())
 @post_router.message(PostState.text, IsAdmin())
 async def set_broadcast_text(message: Message, state: FSMContext):
     if message.text:
+        if len(message.text) >= TELEGRAM_MESSAGE_LIMIT:
+            await message.answer("❌ Слишком длинный текст ПОСТа.")
+            return
         await state.update_data(message_text=message.text)
         await message.answer("Пришлите медиафайл (фото/видео/документ) или напишите 'нет':")
         await state.set_state(PostState.media)
@@ -51,7 +54,7 @@ async def set_broadcast_media(message: Message, state: FSMContext):
 async def confirm_broadcast(message: Message, state: FSMContext):
     if message.text.lower() != "да":
         await message.answer("Сохранение ПОСТа отменено.")
-        return await state.clear()
+        return await state.set_state(UserState.admin)
 
     data = await state.get_data()
     try:
