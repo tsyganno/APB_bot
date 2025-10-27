@@ -11,6 +11,7 @@ class User(Base):
     telegram_id = Column(BigInteger, unique=True, nullable=False)
     username = Column(String, nullable=True)
     name = Column(String, nullable=True)
+    last_post_id = Column(BigInteger, default=None)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     def __repr__(self):
@@ -25,7 +26,6 @@ class Post(Base):
     media_file_id = Column(String, nullable=True)     # file_id медиа
     media_type = Column(String, nullable=True)        # photo / video / document
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    is_sent = Column(Boolean, default=False)
 
     def __repr__(self):
         return f"<Post(id={self.id}, created_at={self.created_at}, message_text={self.message_text})>"

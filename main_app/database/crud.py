@@ -60,8 +60,17 @@ async def search_all_posts():
             return posts
 
 
-async def update_post_is_sent(post_id: int):
-    """ Отмечаем пост как отправленный """
+async def get_unsent_posts_for_user(last_post_id: int | None):
+    """Возвращает посты, которых пользователь ещё не видел."""
     async with async_session_maker() as session:
-        await session.execute(update(Post).where(Post.id == post_id).values(is_sent=True))
+        query = select(Post).where(Post.id > (last_post_id or 0)).order_by(Post.id)
+        result = await session.execute(query)
+        return result.scalars().all()
+
+
+async def update_user_last_post_id(user_id: int, post_id: int):
+    """Обновляет last_post_id пользователя после отправки поста."""
+    async with async_session_maker() as session:
+        stmt = update(User).where(User.telegram_id == user_id).values(last_post_id=post_id)
+        await session.execute(stmt)
         await session.commit()
